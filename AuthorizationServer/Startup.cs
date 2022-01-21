@@ -12,13 +12,13 @@ namespace AuthorizationServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
                     options.LoginPath = "/account/login";
                 });
-            
+
             services.AddDbContext<DbContext>(options =>
             {
                 // Configure the context to use an in-memory store.
@@ -60,15 +60,16 @@ namespace AuthorizationServer
 
                     // Register scopes (permissions)
                     options.RegisterScopes("api");
+                    options.RegisterScopes("profile");
 
                     // Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
                     options
                         .UseAspNetCore()
                         .EnableTokenEndpointPassthrough()
                         .EnableAuthorizationEndpointPassthrough()
-                        .EnableUserinfoEndpointPassthrough();            
+                        .EnableUserinfoEndpointPassthrough();
                 });
-            
+
             services.AddHostedService<TestData>();
         }
 
@@ -82,7 +83,7 @@ namespace AuthorizationServer
             app.UseStaticFiles();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
 
             app.UseAuthorization();
